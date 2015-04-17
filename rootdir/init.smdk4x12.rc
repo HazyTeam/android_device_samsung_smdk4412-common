@@ -36,6 +36,7 @@ on init
 on fs
     mkdir /preload
     mount_all /fstab.smdk4x12
+    swapon_all /fstab.smdk4x12
 
     setprop ro.crypto.fuse_sdcard true
 
@@ -456,7 +457,7 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 /mnt/media_rw/sd
     class late_start
     disabled
 
-service fuse_usbdisk0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk0 /storage/usbdisk0
+service fuse_usbdisk0 /system/bin/sdcard -u 1023 -g 1023 -w 1023 /mnt/media_rw/usbdisk0 /storage/usbdisk0
     class late_start
     disabled
 
@@ -528,9 +529,14 @@ service macloader /system/bin/macloader
     class main
     oneshot
 
-# Workaround for broken incall audio
-service bootsnd /system/bin/tinyplay /system/etc/sound/silence.wav -D 0 -d 0 -p 880
-    class late_start
-    user root
-    group audio
-    oneshot
+# Powersave
+on property:sys.perf.profile=0
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
+
+# Balanced
+on property:sys.perf.profile=1
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor pegasusq
+
+# Performance
+on property:sys.perf.profile=2
+	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
