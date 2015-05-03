@@ -31,7 +31,8 @@ PRODUCT_COPY_FILES := \
     $(COMMON_PATH)/rootdir/init.smdk4x12.usb.rc:root/init.smdk4x12.usb.rc \
     $(COMMON_PATH)/rootdir/init.trace.rc:root/init.trace.rc \
     $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:root/ueventd.smdk4x12.rc \
-    $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc
+    $(COMMON_PATH)/rootdir/ueventd.smdk4x12.rc:recovery/root/ueventd.smdk4x12.rc \
+    $(COMMON_PATH)/rootdir/twrp.fstab:recovery/root/etc/twrp.fstab
 
 # Audio
 PRODUCT_COPY_FILES += \
@@ -134,6 +135,15 @@ PRODUCT_PACKAGES += \
     VisualizationWallpapers \
     librs_jni
 
+# Wifi
+PRODUCT_PACKAGES += \
+    libwpa_client \
+    hostapd \
+    hostapd_default.conf \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
+
 # Charger
 PRODUCT_PACKAGES += \
     charger_res_images
@@ -182,13 +192,7 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
 
-# Media
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.media.use-awesome=true
-
-# USB-OTG
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true
+$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
