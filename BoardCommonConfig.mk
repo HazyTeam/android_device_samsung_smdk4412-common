@@ -31,17 +31,13 @@ TARGET_CPU_VARIANT := cortex-a9
 ARCH_ARM_HAVE_NEON := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
-# Board already specifies -mcpu, but it won't hurt to add mtune, too
-BOARD_GLOBAL_CFLAGS += -mtune=cortex-a9
-BOARD_GLOBAL_CPPFLAGS += -mtune=cortex-a9
-
 # Specify L1/L2 caches used for Exynos 4412
 BOARD_GLOBAL_CFLAGS += --param l1-cache-line-size=32 --param l1-cache-size=32 --param l2-cache-size=1024
 BOARD_GLOBAL_CPPFLAGS += --param l1-cache-line-size=32 --param l1-cache-size=32 --param l2-cache-size=1024
 
-# Hint the compiler that we're using quad-core CPU
-BOARD_GLOBAL_CFLAGS += -mvectorize-with-neon-quad
-BOARD_GLOBAL_CPPFLAGS += -mvectorize-with-neon-quad
+# Compatibility fallback, BOARD_GLOBAL_CFLAGS requires proper support in android_build
+TARGET_GLOBAL_CFLAGS += $(BOARD_GLOBAL_CFLAGS)
+TARGET_GLOBAL_CPPFLAGS += $(BOARD_GLOBAL_CPPFLAGS)
 
 EXYNOS4X12_ENHANCEMENTS := true
 EXYNOS4_ENHANCEMENTS := true
@@ -86,14 +82,19 @@ BOARD_HARDWARE_CLASS := hardware/samsung/cmhw
 BOARD_EGL_CFG := device/samsung/smdk4412-common/configs/egl.cfg
 USE_OPENGL_RENDERER := true
 BOARD_USES_SKIAHWJPEG := true
-COMMON_GLOBAL_CFLAGS += -DSEC_HWJPEG_G2D -DWORKAROUND_BUG_10194508
+COMMON_GLOBAL_CFLAGS += -DSEC_HWJPEG_G2D -DWORKAROUND_BUG_10194508 -DADD_LEGACY_ACQUIRE_BUFFER_SYMBOL
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
 # HWC
 BOARD_USES_PROPRIETARY_HWC := true
 
+# PIE
+TARGET_NEEDS_NON_PIE_SUPPORT := true
+
 # FIMG Acceleration
 BOARD_USES_FIMGAPI := true
 BOARD_USES_SKIA_FIMGAPI := true
+BOARD_USES_SKIA_FIMGAPI_BOOSTUP := true
 
 # Enable WEBGL in WebKit
 ENABLE_WEBGL := true
@@ -125,8 +126,6 @@ TARGET_USES_LOGD := false
 
 BOARD_USES_LEGACY_MMAP := true
 
-# RIL
-BOARD_MOBILEDATA_INTERFACE_NAME := "pdp0"
 BOARD_RIL_CLASS := ../../../hardware/samsung/exynos4/ril
 #BOARD_PROVIDES_LIBRIL and BOARD_MODEM_TYPE are still in device specific makefile
 
