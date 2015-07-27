@@ -541,14 +541,22 @@ service macloader /system/bin/macloader
     class main
     oneshot
 
+# Workaround for broken incall audio
+service bootsnd /system/bin/tinyplay /system/etc/sound/silence.wav -D 0 -d 0 -p 880
+    class late_start
+    user root
+    group audio
+    oneshot
+
 # Powersave
 on property:sys.perf.profile=0
-	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor powersave
 
 # Balanced
 on property:sys.perf.profile=1
-	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor pegasusq
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor pegasusq
 
 # Performance
 on property:sys.perf.profile=2
-	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+
