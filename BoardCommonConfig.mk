@@ -83,15 +83,10 @@ BOARD_EGL_CFG := device/samsung/smdk4412-common/configs/egl.cfg
 USE_OPENGL_RENDERER := true
 BOARD_USES_SKIAHWJPEG := true
 COMMON_GLOBAL_CFLAGS += -DSEC_HWJPEG_G2D -DWORKAROUND_BUG_10194508
+BOARD_USE_MALI_ALIGNMENT := true
 
 # HWC
 BOARD_USES_PROPRIETARY_HWC := true
-
-# PIE
-TARGET_NEEDS_NON_PIE_SUPPORT := true
-
-# dlmalloc
-MALLOC_IMPL := dlmalloc
 
 # FIMG Acceleration
 BOARD_USES_FIMGAPI := true
@@ -181,7 +176,7 @@ BACKLIGHT_PATH := /sys/class/backlight/panel/brightness
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.exynos4
 
-# LPM Battery Percentage
+# Show Battery Percentage in LPM mode
 BOARD_CHARGER_SHOW_PERCENTAGE := true
 
 # inherit from the proprietary version
