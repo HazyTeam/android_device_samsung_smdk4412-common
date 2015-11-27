@@ -88,8 +88,7 @@ PRODUCT_PACKAGES += \
 
 # Misc..    
 PRODUCT_PACKAGES += \
-    libstlport \
-    libboringssl-compat
+    libstlport
 
 # MFC API
 PRODUCT_PACKAGES += \
@@ -121,7 +120,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
-    static_busybox \
     make_ext4fs \
     setup_fs
 
@@ -190,12 +188,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072
 
 PRODUCT_TAGS += dalvik.gc.type-precise
-
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 # Include exynos4 platform specific parts
 TARGET_HAL_PATH := hardware/samsung/exynos4/hal
